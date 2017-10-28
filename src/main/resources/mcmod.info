@@ -1,0 +1,16 @@
+[
+{
+  "modid": "totemaltarations",
+  "name": "Totem Altarations",
+  "description": "An addon for Totem Essentials that adds world-altering Altars using TE Totems.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["IceMetalPunk"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
