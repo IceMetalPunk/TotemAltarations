@@ -1,37 +1,63 @@
 package com.icemetalpunk.totemaltarations.tile;
 
+import javax.annotation.Nonnull;
+
+import com.icemetalpunk.totemessentials.items.essences.ItemEssenceBase;
+import com.icemetalpunk.totemessentials.items.totems.ItemTotemBase;
+
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.InventoryHelper;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
 public class TileEntityTotemAltar extends TileEntity {
-	@CapabilityInject(IItemHandler.class)
-	static Capability<IItemHandler> ITEM_CAP = null;
-
-	private ItemStackHandler stackHandler = new ItemStackHandler(1) {
+	private ItemStackHandler stackHandler = new ItemStackHandler(2) {
 		@Override
 		protected void onContentsChanged(int slot) {
-			// FIXME: Client is not getting updated inventory.
-			TileEntityTotemAltar.this.markDirty();
+			TileEntityTotemAltar.this.syncUpdates();
+		}
+
+		@Override
+		@Nonnull
+		public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
+			if (stack.getItem() instanceof ItemTotemBase) {
+				return super.insertItem(0, stack, simulate);
+			} else if (stack.getItem() instanceof ItemEssenceBase) {
+				ItemStack ins = super.insertItem(1, stack, simulate);
+				return ins;
+			}
+			return stack;
 		}
 
 		@Override
 		public int getSlotLimit(int slot) {
-			return 1;
+			if (slot == 0) {
+				return 1;
+			} else {
+				return 64;
+			}
 		}
 	};
 
 	public TileEntityTotemAltar() {
 		super();
+	}
+
+	public void syncUpdates() {
+		this.world.markBlockRangeForRenderUpdate(this.pos, this.pos);
+		this.world.notifyBlockUpdate(this.pos, this.world.getBlockState(this.pos), this.world.getBlockState(this.pos),
+				3);
+		this.world.scheduleBlockUpdate(this.pos, this.getBlockType(), 0, 0);
+		markDirty();
 	}
 
 	@Override
@@ -71,6 +97,11 @@ public class TileEntityTotemAltar extends TileEntity {
 	}
 
 	@Override
+	public NBTTagCompound getUpdateTag() {
+		return this.writeToNBT(new NBTTagCompound());
+	}
+
+	@Override
 	public SPacketUpdateTileEntity getUpdatePacket() {
 		return new SPacketUpdateTileEntity(this.getPos(), 0, this.writeToNBT(new NBTTagCompound()));
 	}
@@ -79,6 +110,10 @@ public class TileEntityTotemAltar extends TileEntity {
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		this.setPos(pkt.getPos());
 		this.readFromNBT(pkt.getNbtCompound());
+	}
+	
+	public void dropItems() {
+
 	}
 
 }

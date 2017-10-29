@@ -12,12 +12,12 @@ public class TAClientProxy extends TACommonProxy {
 	@Override
 	public void preInit(FMLPreInitializationEvent e) {
 		super.preInit(e);
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTotemAltar.class, new AltarPedestalTESR());
 	}
 
 	@Override
 	public void init(FMLInitializationEvent e) {
 		super.init(e);
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTotemAltar.class, new AltarPedestalTESR());
 	}
 
 	@Override

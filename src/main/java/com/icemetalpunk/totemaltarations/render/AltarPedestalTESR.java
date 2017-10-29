@@ -8,7 +8,6 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
@@ -18,7 +17,7 @@ public class AltarPedestalTESR extends TileEntitySpecialRenderer<TileEntityTotem
 	protected final EntityItem entity = new EntityItem(Minecraft.getMinecraft().world, 0, 0, 0,
 			new ItemStack(Items.TOTEM_OF_UNDYING, 1));
 	protected int rotationControl = 0;
-	protected final int INV_ROTATION_SPEED = 4;
+	protected final int INV_ROTATION_SPEED = 2;
 
 	public AltarPedestalTESR() {
 		super();
@@ -35,20 +34,15 @@ public class AltarPedestalTESR extends TileEntitySpecialRenderer<TileEntityTotem
 	public void render(TileEntityTotemAltar te, double x, double y, double z, float partialTicks, int destroyStage,
 			float alpha) {
 
-		System.out.println("--------");
-		System.out.println("Checking capability:");
-		if (!te.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.EAST)) {
+		if (!te.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) {
 			return;
 		}
-		System.out.println("Getting stack:");
-		IItemHandler handler = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.EAST);
+		IItemHandler handler = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 		ItemStack stack = handler.getStackInSlot(0);
 
-		System.out.println("Stack: " + stack);
-		if (stack == null || stack == ItemStack.EMPTY) {
+		if (stack == null || stack.isEmpty()) {
 			return;
 		}
-		System.out.println("Moving onto rendering.");
 
 		entity.setWorld(te.getWorld());
 		entity.setItem(stack);
