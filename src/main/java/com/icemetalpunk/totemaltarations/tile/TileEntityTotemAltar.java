@@ -6,13 +6,11 @@ import com.icemetalpunk.totemessentials.items.essences.ItemEssenceBase;
 import com.icemetalpunk.totemessentials.items.totems.ItemTotemBase;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
@@ -110,10 +108,6 @@ public class TileEntityTotemAltar extends TileEntity {
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		this.setPos(pkt.getPos());
 		this.readFromNBT(pkt.getNbtCompound());
-	}
-	
-	public void dropItems() {
-
 	}
 
 }
