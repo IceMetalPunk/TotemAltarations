@@ -1,11 +1,18 @@
 package com.icemetalpunk.totemaltarations.tile;
 
+import java.util.HashMap;
+
 import javax.annotation.Nonnull;
 
+import com.icemetalpunk.totemaltarations.behaviors.AltarBehaviorReaper;
+import com.icemetalpunk.totemaltarations.behaviors.IAltarBehavior;
+import com.icemetalpunk.totemessentials.TotemEssentials;
 import com.icemetalpunk.totemessentials.items.essences.ItemEssenceBase;
 import com.icemetalpunk.totemessentials.items.totems.ItemTotemBase;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -13,11 +20,23 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityTotemAltar extends TileEntity {
+public class TileEntityTotemAltar extends TileEntity implements ITickable {
+
+	private int size = 3;
+	public int cooldown = 100;
+	public int maxCooldown = 100;
+	private static HashMap<Item, IAltarBehavior> behaviorMap = new HashMap<>();
+
+	public static void loadBehaviors() {
+		behaviorMap.put(TotemEssentials.proxy.items.get("reaping_totem"), new AltarBehaviorReaper());
+	}
+
 	private ItemStackHandler stackHandler = new ItemStackHandler(2) {
 		@Override
 		protected void onContentsChanged(int slot) {
@@ -108,6 +127,38 @@ public class TileEntityTotemAltar extends TileEntity {
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		this.setPos(pkt.getPos());
 		this.readFromNBT(pkt.getNbtCompound());
+	}
+
+	/* TODO: Scan and construct altar from blocks around. */
+
+	public int getSize() {
+		return this.size;
+	}
+
+	@Override
+	public void update() {
+		if (--this.cooldown <= 0) {
+			this.cooldown = this.maxCooldown;
+			ItemStack stack = this.stackHandler.getStackInSlot(0);
+			Item item = stack.getItem();
+			if (item != null && behaviorMap.containsKey(item)) {
+				IAltarBehavior behave = behaviorMap.get(item);
+				if (behave.canTrigger(this)) {
+					int damage = behave.trigger(this);
+					if (damage > 0) {
+						stack.setItemDamage(stack.getItemDamage() + damage);
+						if (stack.getItemDamage() >= stack.getMaxDamage()) {
+							stack.shrink(1);
+						}
+						if (stack.getCount() <= 0) {
+							this.stackHandler.setStackInSlot(0, ItemStack.EMPTY);
+							this.world.playSound((EntityPlayer) null, this.pos, SoundEvents.ENTITY_ITEM_BREAK,
+									SoundCategory.BLOCKS, 1.0f, 1.0f);
+						}
+					}
+				}
+			}
+		}
 	}
 
 }

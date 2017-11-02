@@ -1,6 +1,7 @@
 package com.icemetalpunk.totemaltarations.events;
 
 import com.icemetalpunk.totemaltarations.TotemAltarations;
+import com.icemetalpunk.totemaltarations.tile.TileEntityTotemAltar;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -23,6 +24,9 @@ public class TARegistryEvents {
 	public void itemHandler(RegistryEvent.Register<Item> ev) {
 		TotemAltarations.proxy.items.registerAll(ev);
 		TotemAltarations.proxy.blocks.registerItemBlocks(ev);
+
+		TileEntityTotemAltar.loadBehaviors();
+
 	}
 
 	@SubscribeEvent
