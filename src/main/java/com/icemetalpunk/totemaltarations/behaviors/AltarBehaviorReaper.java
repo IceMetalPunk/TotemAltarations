@@ -28,7 +28,8 @@ public class AltarBehaviorReaper implements IAltarBehavior {
 		World world = altar.getWorld();
 		AxisAlignedBB bb = new AxisAlignedBB(altar.getPos());
 		int size = altar.getSize();
-		List<EntityLiving> mobs = world.getEntitiesWithinAABB(EntityLiving.class, bb.expand(size, size, size));
+		List<EntityLiving> mobs = world.getEntitiesWithinAABB(EntityLiving.class,
+				bb.expand(size, size, size).offset(-size / 2, -size / 2, -size / 2));
 		return (mobs.size() > 0);
 	}
 
@@ -43,7 +44,8 @@ public class AltarBehaviorReaper implements IAltarBehavior {
 		AxisAlignedBB bb = new AxisAlignedBB(altar.getPos());
 		int size = altar.getSize();
 		int count = 0;
-		List<EntityLiving> mobs = world.getEntitiesWithinAABB(EntityLiving.class, bb.expand(size, size, size));
+		List<EntityLiving> mobs = world.getEntitiesWithinAABB(EntityLiving.class,
+				bb.expand(size, size, size).offset(-size / 2, -size / 2, -size / 2));
 		for (EntityLiving ent : mobs) {
 			ent.setEntityInvulnerable(true); // So when totem breaks, fighting
 												// goes down.
@@ -51,7 +53,6 @@ public class AltarBehaviorReaper implements IAltarBehavior {
 				dropLoot.invoke(ent, false, 0, DamageSource.MAGIC);
 				++count;
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-				// manager.getLootTableFromLocation(resourcelocation);
 				e.printStackTrace();
 			}
 		}

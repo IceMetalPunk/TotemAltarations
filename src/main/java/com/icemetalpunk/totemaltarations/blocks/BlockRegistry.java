@@ -31,8 +31,8 @@ public class BlockRegistry {
 		}
 	}
 
-	public static Block get(String name) {
-		return (Block) registry.get(name);
+	public static BasicBlock get(String name) {
+		return registry.get(name);
 	}
 
 	public void registerModels() {

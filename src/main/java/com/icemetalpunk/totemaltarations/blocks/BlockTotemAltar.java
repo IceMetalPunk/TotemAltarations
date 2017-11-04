@@ -1,5 +1,7 @@
 package com.icemetalpunk.totemaltarations.blocks;
 
+import java.util.Random;
+
 import com.icemetalpunk.totemaltarations.tile.TileEntityTotemAltar;
 import com.icemetalpunk.totemessentials.items.essences.ItemEssenceBase;
 
@@ -10,19 +12,18 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-/* TODO: BlockTotemAltar Assets
- * 1. Model/textures
- * 2. Item model/texture
- * 3. Recipe
- */
 public class BlockTotemAltar extends TABlock implements ITileEntityProvider {
 
 	public BlockTotemAltar(String name) {
@@ -79,5 +80,35 @@ public class BlockTotemAltar extends TABlock implements ITileEntityProvider {
 		}
 
 		super.breakBlock(worldIn, pos, state);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public BlockRenderLayer getBlockLayer() {
+		return BlockRenderLayer.CUTOUT;
+	}
+
+	@Override
+	public boolean isFullCube(IBlockState state) {
+		return false;
+	}
+
+	@Override
+	public boolean isOpaqueCube(IBlockState state) {
+		return false;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+		// TODO: Make particles land inside block and not fall through.
+		for (int i = 0; i < 3; ++i) {
+			int j = rand.nextInt(2) * 2 - 1;
+			int k = rand.nextInt(2) * 2 - 1;
+			double x = (double) pos.getX() + 0.5D + 0.25D * (double) j;
+			double y = (double) ((float) pos.getY() + rand.nextFloat() * 0.625);
+			double z = (double) pos.getZ() + 0.5D + 0.25D * (double) k;
+			worldIn.spawnParticle(EnumParticleTypes.TOTEM, x, y, z, 0, 0, 0);
+		}
 	}
 }

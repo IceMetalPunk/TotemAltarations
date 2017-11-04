@@ -146,15 +146,12 @@ public class TileEntityTotemAltar extends TileEntity implements ITickable {
 				if (behave.canTrigger(this)) {
 					int damage = behave.trigger(this);
 					if (damage > 0) {
-						stack.setItemDamage(stack.getItemDamage() + damage);
-						if (stack.getItemDamage() >= stack.getMaxDamage()) {
-							stack.shrink(1);
-						}
-						if (stack.getCount() <= 0) {
+						if (stack.attemptDamageItem(damage, this.world.rand, null)) {
 							this.stackHandler.setStackInSlot(0, ItemStack.EMPTY);
-							this.world.playSound((EntityPlayer) null, this.pos, SoundEvents.ENTITY_ITEM_BREAK,
-									SoundCategory.BLOCKS, 1.0f, 1.0f);
+							this.world.playSound(null, this.pos, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.BLOCKS,
+									1.0f, 1.0f);
 						}
+						this.markDirty();
 					}
 				}
 			}

@@ -1,0 +1,46 @@
+{
+    "parent": "block/block",
+	"textures": {
+		"glass": "minecraft:blocks/glass",
+		"obsidian": "minecraft:blocks/obsidian",
+		"particle": "minecraft:blocks/obsidian"
+	},
+    "elements": [
+        {
+			"from": [ 0, 0, 0 ],
+            "to": [ 16, 10, 16 ],
+            "faces": {
+                "down":  { "texture": "#glass" },
+                "up":    { "texture": "#glass" },
+                "north": { "texture": "#glass" },
+                "south": { "texture": "#glass" },
+                "west":  { "texture": "#glass" },
+                "east":  { "texture": "#glass" }
+            }
+        },
+		{
+			"from": [ 0, 10, 0 ],
+            "to": [ 16, 12, 16 ],
+            "faces": {
+                "down":  { "texture": "#obsidian" },
+                "up":    { "texture": "#obsidian" },
+                "north": { "texture": "#obsidian" },
+                "south": { "texture": "#obsidian" },
+                "west":  { "texture": "#obsidian" },
+                "east":  { "texture": "#obsidian" }
+            }
+        },
+		{
+			"from": [ 4, 10, 4 ],
+            "to": [ 12, 16, 12 ],
+            "faces": {
+                "down":  { "texture": "#obsidian" },
+                "up":    { "texture": "#obsidian" },
+                "north": { "texture": "#obsidian" },
+                "south": { "texture": "#obsidian" },
+                "west":  { "texture": "#obsidian" },
+                "east":  { "texture": "#obsidian" }
+            }
+        }
+    ]
+}

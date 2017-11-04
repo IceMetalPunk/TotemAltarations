@@ -4,7 +4,6 @@ import com.icemetalpunk.totemaltarations.events.TARegistryEvents;
 import com.icemetalpunk.totemaltarations.proxies.TACommonProxy;
 
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -26,8 +25,7 @@ public class TotemAltarations {
 
 		@Override
 		public ItemStack getTabIconItem() {
-			// TODO: Make this a totem altarations item.
-			return new ItemStack(Items.TOTEM_OF_UNDYING);
+			return new ItemStack(TotemAltarations.proxy.blocks.get("block_totem_altar").getItemBlock());
 		}
 
 	};

@@ -1,0 +1,33 @@
+		{
+  "parent": "totemaltarations:recipes/root",
+  "rewards": {
+    "recipes": [
+      "totemaltarations:block_totem_altar"
+    ]
+  },
+  "criteria": {
+    "has_shell": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "totemessentials:totem_shell",
+            "data": 0
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "totemaltarations:block_totem_altar"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_shell",
+      "has_the_recipe"
+    ]
+  ]
+}
