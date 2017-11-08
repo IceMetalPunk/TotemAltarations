@@ -67,9 +67,6 @@ public class AltarPedestalTESR extends TileEntitySpecialRenderer<TileEntityTotem
 		diamondREI.doRender(innerDiamond, x + 0.5, y, z + 0.5, 0, partialTicks);
 		this.setLightmapDisabled(false);
 
-		// FIXME: If totem in slot breaks, it continues to render even though
-		// it's not really there.
-
 		if (!te.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) {
 			return;
 		}
